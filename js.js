@@ -4,8 +4,7 @@ var dd = document.getElementById('dd');
 
 yyyy.onkeydown = function (e) {
     var key = e.keyCode || e.charCode;
-    if (yyyy.value.length === yyyy.maxLength && key === 39 &&
-            yyyy.selectionStart === 4) {
+    if (yyyy.selectionStart === yyyy.value.length && key === 39) {
         mm.focus();
         mm.selectionStart = 0;
         return false;
@@ -31,7 +30,7 @@ mm.onkeydown = function (e) {
         yyyy.selectionStart = 4;
         return false;
     }
-    if (key === 39 && mm.selectionStart === 2) {
+    if (key === 39 && mm.selectionStart === mm.value.length) {
         dd.focus();
         dd.selectionStart = 0;
         return false;
@@ -49,6 +48,7 @@ dd.onkeydown = function (e) {
     var key = e.keyCode || e.charCode;
     if (key === 8 && dd.value.length === 0) {
         mm.focus();
+        mm.selectionStart = 2;
     }
     if (key === 37 && dd.selectionStart === 0) {
         mm.focus();
@@ -279,30 +279,30 @@ function makeChineseDate(date) {
     };
 
     var solarTermsEnglish = {
-         '204': 'start of spring',
-         '219': 'rain water',
-         '306': 'awakening of insects',
-         '321': 'vernal equinox',
-         '405': 'clear and bright',
-         '420': 'grain rain',
-         '506': 'start of summer',
-         '521': 'grain full',
-         '606': 'grain in ear',
-         '621': 'summer solstice',
-         '707': 'minor heat',
-         '723': 'major heat',
-         '808': 'start of autumn',
-         '823': 'limit of heat',
-         '908': 'white dew',
-         '923': 'autumnal equinox',
-        '1008': 'cold dew',
-        '1024': 'frost descent',
-        '1108': 'start of winter',
-        '1122': 'minor snow',
-        '1207': 'major snow',
-        '1222': 'winter solstice',
-         '106': 'minor cold',
-         '120': 'major cold'
+         '204': 'Start of Spring',
+         '219': 'Rain Water',
+         '306': 'Awakening of Insects',
+         '321': 'Vernal Equinox',
+         '405': 'Clear and Bright',
+         '420': 'Grain Rain',
+         '506': 'Start of Summer',
+         '521': 'Grain Full',
+         '606': 'Grain in Ear',
+         '621': 'Summer Solstice',
+         '707': 'Minor Heat',
+         '723': 'Major Heat',
+         '808': 'Start of Autumn',
+         '823': 'Limit of Heat',
+         '908': 'White Dew',
+         '923': 'Autumnal Equinox',
+        '1008': 'Cold Dew',
+        '1024': 'Frost Descent',
+        '1108': 'Start of Winter',
+        '1122': 'Minor Snow',
+        '1207': 'Major Snow',
+        '1222': 'Winter Solstice',
+         '106': 'Minor Cold',
+         '120': 'Major Cold'
     };
 
     var solarTermAvailable = false,
