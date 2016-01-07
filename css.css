@@ -1,18 +1,19 @@
 body {
 	text-align: center;
-	font-family: Arial, Helvetica, 'Source Han Sans TC', sans-serif;
 	font-size: 1em;
 	letter-spacing: 1px;
 }
 
 .chinese {
+	font-family: 'PMingLiU', 'MingLiU', 'LiSong Pro Light', 'Apple LiSung Light', serif;
 	font-size: 20em;
 	margin-bottom: -16px;
-	font-weight: 900;
+	/*font-weight: 900;*/
 }
 
 .pinyin {
-	font-size: 1.2em;
+	font-family: 'Times New Roman', 'Times', serif;
+	font-size: 1.5em;
 	border: 1px solid #d33;
 	color: #d33;
 	padding: 5px;
@@ -22,6 +23,6 @@ body {
 
 .english {
 	font-size: 3em;
-	font-family: 'Times New Roman', Times, serif;
+	font-family: 'PMingLiU', 'LiSong Pro Light', 'Apple LiSung Light', 'SimSun', serif;
 	margin-bottom: 1em;
 }
