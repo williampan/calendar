@@ -1,3 +1,62 @@
+var yyyy = document.getElementById('yyyy');
+var mm = document.getElementById('mm');
+var dd = document.getElementById('dd');
+
+yyyy.onkeydown = function (e) {
+    var key = e.keyCode || e.charCode;
+    if (yyyy.value.length === yyyy.maxLength && key === 39 &&
+            yyyy.selectionStart === 4) {
+        mm.focus();
+        mm.selectionStart = 0;
+        return false;
+    }
+};
+
+yyyy.onkeyup = function (e) {
+    var key = e.keyCode || e.charCode;
+    if (yyyy.value.length === yyyy.maxLength && key >= 48) {
+        mm.focus();
+        mm.selectionStart = 0;
+    }
+};
+
+mm.onkeydown = function (e) {
+    var key = e.keyCode || e.charCode;
+    if (key === 8 && mm.value.length === 0) {
+        yyyy.focus();
+        yyyy.selectionStart = 4;
+    }
+    if (key === 37 && mm.selectionStart === 0) {
+        yyyy.focus();
+        yyyy.selectionStart = 4;
+        return false;
+    }
+    if (key === 39 && mm.selectionStart === 2) {
+        dd.focus();
+        dd.selectionStart = 0;
+        return false;
+    }
+};
+
+mm.onkeyup = function (e) {
+    var key = e.keyCode || e.charCode;
+    if (mm.value.length === mm.maxLength && key >= 48) {
+        dd.focus();
+    }
+};
+
+dd.onkeydown = function (e) {
+    var key = e.keyCode || e.charCode;
+    if (key === 8 && dd.value.length === 0) {
+        mm.focus();
+    }
+    if (key === 37 && dd.selectionStart === 0) {
+        mm.focus();
+        mm.selectionStart = 2;
+        return false;
+    }
+};
+
 function writeChineseDate(cd) {
 
     function writeSection(id, section) {
