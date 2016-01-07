@@ -6,11 +6,11 @@
     <link rel="stylesheet" href="css.css">
 </head>
 <body>
-    <section id="date-input">
-        <input type="text" id="yyyy" maxlength="4" pattern="[0-9]{4}">
-        <input type="text" id="mm" maxlength="2" pattern="0[1-9]|1[0-2]">
-        <input type="text" id="dd" maxlength="2" pattern="0[1-9]|[1-2][0–9]|30|31">
-    </section>
+    <form id="date-input">
+        <input type="text" id="yyyy" maxlength="4" pattern="[0-9]{4}" placeholder="YYYY"> -
+        <input type="text" id="mm" maxlength="2" pattern="0[1-9]|1[0-2]" placeholder="MM"> -
+        <input type="text" id="dd" maxlength="2" pattern="(0[1-9])|([1-2][0–9])|30|31" placeholder="DD">
+    </form>
     <section id="year">
         <div class="chinese" lang="zh">〇〇</div>
         <div class="pinyin">?</div>
