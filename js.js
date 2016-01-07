@@ -1,6 +1,25 @@
+
+// Key codes:
+//  8  : backspace
+// 37  : left arrow
+// 39  : right arrow
+// 48+ : characters
+
 var yyyy = document.getElementById('yyyy');
 var mm = document.getElementById('mm');
 var dd = document.getElementById('dd');
+
+yyyy.onclick = function (e) {
+    this.select();
+}
+
+mm.onclick = function (e) {
+    this.select();
+}
+
+dd.onclick = function (e) {
+    this.select();
+}
 
 yyyy.onkeydown = function (e) {
     var key = e.keyCode || e.charCode;
@@ -14,7 +33,7 @@ yyyy.onkeydown = function (e) {
 yyyy.onkeyup = function (e) {
     var key = e.keyCode || e.charCode;
     if (yyyy.value.length === yyyy.maxLength && key >= 48) {
-        mm.focus();
+        mm.select();
         mm.selectionStart = 0;
     }
 };
@@ -40,7 +59,7 @@ mm.onkeydown = function (e) {
 mm.onkeyup = function (e) {
     var key = e.keyCode || e.charCode;
     if (mm.value.length === mm.maxLength && key >= 48) {
-        dd.focus();
+        dd.select();
     }
 };
 
@@ -81,6 +100,8 @@ function writeChineseDate(cd) {
     } else {
         document.getElementById('holiday').style.display = 'none';
     }
+
+    // writeDateInput(cd);
 }
 
 function writeChinese(id, string) {
@@ -93,6 +114,21 @@ function writePinyin(id, string) {
 
 function writeEnglish(id, string) {
     document.getElementById(id).getElementsByClassName('english')[0].innerHTML = string;
+}
+
+function writeDateInput(cd) {
+    var yyyy = document.getElementById('yyyy');
+    var mm = document.getElementById('mm');
+    var dd = document.getElementById('dd');
+
+    function pad(num, size) {
+        var s = '0000' + num;
+        return s.substr(s.length - size);
+    }
+
+    yyyy.value = pad(cd.gregorianYear, 4);
+    mm.value = pad(cd.gregorianMonth, 2);
+    dd.value = pad(cd.gregorianDate, 2);
 }
 
 Date.prototype.addDays = function (days) {
@@ -116,6 +152,12 @@ function makeChineseDate(date) {
             return "th";
         }
     }
+
+    ChineseDate.gregorianYear = date.getFullYear();
+    ChineseDate.gregorianMonth = date.getMonth() + 1;
+    ChineseDate.gregorianDate = date.getDate();
+
+    // Get Chinese date string
 
     var options = {
         year: 'numeric',
@@ -311,9 +353,7 @@ function makeChineseDate(date) {
         solarTermEnglish = '';
 
     if (!isLeapMonth) {
-        var gregorianMonth = date.getMonth() + 1;
-        var gregorianDate = date.getDate();
-        var gregorianMMDD = gregorianMonth * 100 + gregorianDate;
+        var gregorianMMDD = ChineseDate.gregorianMonth * 100 + ChineseDate.gregorianDate;
 
         if (solarTerms.hasOwnProperty(gregorianMMDD)) {
             solarTermAvailable = true;
@@ -451,3 +491,22 @@ writeChineseDate(cd);
 console.log(cd.full.string);
 console.log(cd.full.pinyin);
 console.log(cd.full.english);
+
+
+var dateInput = document.getElementById('date-input');
+var yyyy = document.getElementById('yyyy');
+var mm = document.getElementById('mm');
+var dd = document.getElementById('dd');
+
+dateInput.onkeyup = function (e) {
+    if (dateInput.checkValidity() === true
+            && yyyy.value.length > 0
+            && dd.value.length > 0
+            && mm.value.length > 0) {
+        yValue = parseInt(yyyy.value);
+        mValue = parseInt(mm.value) - 1;
+        dValue = parseInt(dd.value);
+        var cd = makeChineseDate(new Date(yValue, mValue, dValue));
+        writeChineseDate(cd);
+    }
+};
