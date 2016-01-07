@@ -90,12 +90,14 @@ function writeChineseDate(cd) {
     writeSection('date', cd.date);
 
     if (cd.solarTerm.available) {
+        document.getElementById('solar-term').style.display = '';
         writeSection('solar-term', cd.solarTerm);
     } else {
         document.getElementById('solar-term').style.display = 'none';
     }
 
     if (cd.holiday.available) {
+        document.getElementById('holiday').style.display = '';
         writeSection('holiday', cd.holiday);
     } else {
         document.getElementById('holiday').style.display = 'none';
