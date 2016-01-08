@@ -1,154 +1,5 @@
 var CC = CC || {};
 
-CC.dateInput = {
-    init: function () {
-        // Key codes:
-        //  8  : backspace
-        // 37  : left arrow
-        // 39  : right arrow
-        // 48+ : characters
-
-        var dateInputElement = document.getElementById('date-input');
-        var yyyy = document.getElementById('yyyy');
-        var mm = document.getElementById('mm');
-        var dd = document.getElementById('dd');
-
-        yyyy.onclick = function (e) {
-            this.select();
-        }
-
-        mm.onclick = function (e) {
-            this.select();
-        }
-
-        dd.onclick = function (e) {
-            this.select();
-        }
-
-        yyyy.onkeydown = function (e) {
-            var key = e.keyCode || e.charCode;
-            if (yyyy.selectionStart === yyyy.value.length && key === 39) {
-                mm.focus();
-                mm.selectionStart = 0;
-                return false;
-            }
-        };
-
-        yyyy.onkeyup = function (e) {
-            var key = e.keyCode || e.charCode;
-            if (yyyy.value.length === yyyy.maxLength && key >= 48) {
-                mm.select();
-                mm.selectionStart = 0;
-            }
-        };
-
-        mm.onkeydown = function (e) {
-            var key = e.keyCode || e.charCode;
-            if (key === 8 && mm.value.length === 0) {
-                yyyy.focus();
-                yyyy.selectionStart = 4;
-            }
-            if (key === 37 && mm.selectionStart === 0) {
-                yyyy.focus();
-                yyyy.selectionStart = 4;
-                return false;
-            }
-            if (key === 39 && mm.selectionStart === mm.value.length) {
-                dd.focus();
-                dd.selectionStart = 0;
-                return false;
-            }
-        };
-
-        mm.onkeyup = function (e) {
-            var key = e.keyCode || e.charCode;
-            if (mm.value.length === mm.maxLength && key >= 48) {
-                dd.select();
-            }
-        };
-
-        dd.onkeydown = function (e) {
-            var key = e.keyCode || e.charCode;
-            if (key === 8 && dd.value.length === 0) {
-                mm.focus();
-                mm.selectionStart = 2;
-            }
-            if (key === 37 && dd.selectionStart === 0) {
-                mm.focus();
-                mm.selectionStart = 2;
-                return false;
-            }
-        };
-
-        dateInputElement.onkeyup = function (e) {
-            if (dateInputElement.checkValidity()
-                    && yyyy.value.length > 0
-                    && dd.value.length > 0
-                    && mm.value.length > 0) {
-                yValue = parseInt(yyyy.value);
-                mValue = parseInt(mm.value) - 1;
-                dValue = parseInt(dd.value);
-                var cd = CC.makeChineseDate(new Date(yValue, mValue, dValue));
-                CC.writeChineseDate(cd);
-            }
-        };
-    }
-};
-
-CC.writeChineseDate = function (cd) {
-    function writeChinese(id, string) {
-        document.getElementById(id).getElementsByClassName('chinese')[0].innerHTML = string;
-    }
-
-    function writePinyin(id, string) {
-        document.getElementById(id).getElementsByClassName('pinyin')[0].innerHTML = string;
-    }
-
-    function writeEnglish(id, string) {
-        document.getElementById(id).getElementsByClassName('english')[0].innerHTML = string;
-    }
-
-    function writeSection(id, section) {
-        writeChinese(id, section.string);
-        writePinyin(id, section.pinyin);
-        writeEnglish(id, section.english);
-    }
-
-    function writeDateInput(cd) {
-        var yyyy = document.getElementById('yyyy');
-        var mm = document.getElementById('mm');
-        var dd = document.getElementById('dd');
-
-        function pad(num, size) {
-            var s = '0000' + num;
-            return s.substr(s.length - size);
-        }
-
-        yyyy.value = pad(cd.gregorianYear, 4);
-        mm.value = pad(cd.gregorianMonth, 2);
-        dd.value = pad(cd.gregorianDate, 2);
-    }
-
-    writeSection('year', cd.year);
-    writeSection('zodiac', cd.zodiac);
-    writeSection('month', cd.month);
-    writeSection('date', cd.date);
-
-    if (cd.solarTerm.available) {
-        document.getElementById('solar-term').style.display = '';
-        writeSection('solar-term', cd.solarTerm);
-    } else {
-        document.getElementById('solar-term').style.display = 'none';
-    }
-
-    if (cd.holiday.available) {
-        document.getElementById('holiday').style.display = '';
-        writeSection('holiday', cd.holiday);
-    } else {
-        document.getElementById('holiday').style.display = 'none';
-    }
-};
-
 Date.prototype.addDays = function (days) {
     var newDate = new Date(this.valueOf());
     newDate.setDate(newDate.getDate() + days);
@@ -501,6 +352,155 @@ CC.makeChineseDate = function (date) {
     };
 
     return ChineseDate;
+};
+
+CC.writeChineseDate = function (cd) {
+    function writeChinese(id, string) {
+        document.getElementById(id).getElementsByClassName('chinese')[0].innerHTML = string;
+    }
+
+    function writePinyin(id, string) {
+        document.getElementById(id).getElementsByClassName('pinyin')[0].innerHTML = string;
+    }
+
+    function writeEnglish(id, string) {
+        document.getElementById(id).getElementsByClassName('english')[0].innerHTML = string;
+    }
+
+    function writeSection(id, section) {
+        writeChinese(id, section.string);
+        writePinyin(id, section.pinyin);
+        writeEnglish(id, section.english);
+    }
+
+    function writeDateInput(cd) {
+        var yyyy = document.getElementById('yyyy');
+        var mm = document.getElementById('mm');
+        var dd = document.getElementById('dd');
+
+        function pad(num, size) {
+            var s = '0000' + num;
+            return s.substr(s.length - size);
+        }
+
+        yyyy.value = pad(cd.gregorianYear, 4);
+        mm.value = pad(cd.gregorianMonth, 2);
+        dd.value = pad(cd.gregorianDate, 2);
+    }
+
+    writeSection('year', cd.year);
+    writeSection('zodiac', cd.zodiac);
+    writeSection('month', cd.month);
+    writeSection('date', cd.date);
+
+    if (cd.solarTerm.available) {
+        document.getElementById('solar-term').style.display = '';
+        writeSection('solar-term', cd.solarTerm);
+    } else {
+        document.getElementById('solar-term').style.display = 'none';
+    }
+
+    if (cd.holiday.available) {
+        document.getElementById('holiday').style.display = '';
+        writeSection('holiday', cd.holiday);
+    } else {
+        document.getElementById('holiday').style.display = 'none';
+    }
+};
+
+CC.dateInput = {
+    init: function () {
+        // Key codes:
+        //  8  : backspace
+        // 37  : left arrow
+        // 39  : right arrow
+        // 48+ : characters
+
+        var dateInputElement = document.getElementById('date-input');
+        var yyyy = document.getElementById('yyyy');
+        var mm = document.getElementById('mm');
+        var dd = document.getElementById('dd');
+
+        yyyy.onclick = function (e) {
+            this.select();
+        }
+
+        mm.onclick = function (e) {
+            this.select();
+        }
+
+        dd.onclick = function (e) {
+            this.select();
+        }
+
+        yyyy.onkeydown = function (e) {
+            var key = e.keyCode || e.charCode;
+            if (yyyy.selectionStart === yyyy.value.length && key === 39) {
+                mm.focus();
+                mm.selectionStart = 0;
+                return false;
+            }
+        };
+
+        yyyy.onkeyup = function (e) {
+            var key = e.keyCode || e.charCode;
+            if (yyyy.value.length === yyyy.maxLength && key >= 48) {
+                mm.select();
+                mm.selectionStart = 0;
+            }
+        };
+
+        mm.onkeydown = function (e) {
+            var key = e.keyCode || e.charCode;
+            if (key === 8 && mm.value.length === 0) {
+                yyyy.focus();
+                yyyy.selectionStart = 4;
+            }
+            if (key === 37 && mm.selectionStart === 0) {
+                yyyy.focus();
+                yyyy.selectionStart = 4;
+                return false;
+            }
+            if (key === 39 && mm.selectionStart === mm.value.length) {
+                dd.focus();
+                dd.selectionStart = 0;
+                return false;
+            }
+        };
+
+        mm.onkeyup = function (e) {
+            var key = e.keyCode || e.charCode;
+            if (mm.value.length === mm.maxLength && key >= 48) {
+                dd.select();
+            }
+        };
+
+        dd.onkeydown = function (e) {
+            var key = e.keyCode || e.charCode;
+            if (key === 8 && dd.value.length === 0) {
+                mm.focus();
+                mm.selectionStart = 2;
+            }
+            if (key === 37 && dd.selectionStart === 0) {
+                mm.focus();
+                mm.selectionStart = 2;
+                return false;
+            }
+        };
+
+        dateInputElement.onkeyup = function (e) {
+            if (dateInputElement.checkValidity()
+                    && yyyy.value.length > 0
+                    && dd.value.length > 0
+                    && mm.value.length > 0) {
+                yValue = parseInt(yyyy.value);
+                mValue = parseInt(mm.value) - 1;
+                dValue = parseInt(dd.value);
+                var cd = CC.makeChineseDate(new Date(yValue, mValue, dValue));
+                CC.writeChineseDate(cd);
+            }
+        };
+    }
 };
 
 CC.init = function () {
