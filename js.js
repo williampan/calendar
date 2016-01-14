@@ -505,14 +505,14 @@ CC.dateInput = {
 
 
 CC.tooltip = {
-    on: false,
-    create: function () {
+    tooltip: null,
+    create: function (text) {
         var left = 3;
         var top = 3;
 
-        if (!CC.tooltip.on) {
-            CC.tooltip.on = true;
-            var tt = document.createElement('div');
+        if (CC.tooltip.tooltip === null) {
+            CC.tooltip.tooltip = document.createElement('div');
+            tt = CC.tooltip.tooltip;
             tt.setAttribute('id', 'tooltip');
             var content = document.createElement('div');
             tt.appendChild(content);
@@ -524,15 +524,59 @@ CC.tooltip = {
                 tt.style.left = (leftEdge + left) + 'px';
             };
 
-            content.innerHTML = 'TEST';
+            content.innerHTML = text;
             tt.style.width = '300px';
             tt.style.height = '100px';
             h = parseInt(tt.offsetHeight) + top;
         }
     },
+    clear: function () {
+        if (document.body.contains(CC.tooltip.tooltip)) {
+            document.body.removeChild(CC.tooltip.tooltip);
+        }
+        CC.tooltip.tooltip = null;
+    },
     init: function () {
         document.getElementById('year').onmouseover = function (e) {
-            CC.tooltip.create();
+            CC.tooltip.create('year');
+        };
+        document.getElementById('year').onmouseleave = function (e) {
+            CC.tooltip.clear();
+        };
+
+        document.getElementById('zodiac').onmouseover = function (e) {
+            CC.tooltip.create('zodiac');
+        };
+        document.getElementById('zodiac').onmouseleave = function (e) {
+            CC.tooltip.clear();
+        };
+
+        document.getElementById('month').onmouseover = function (e) {
+            CC.tooltip.create('month');
+        };
+        document.getElementById('month').onmouseleave = function (e) {
+            CC.tooltip.clear();
+        };
+
+        document.getElementById('date').onmouseover = function (e) {
+            CC.tooltip.create('date');
+        };
+        document.getElementById('date').onmouseleave = function (e) {
+            CC.tooltip.clear();
+        };
+
+        document.getElementById('solar-term').onmouseover = function (e) {
+            CC.tooltip.create('solar-term');
+        };
+        document.getElementById('solar-term').onmouseleave = function (e) {
+            CC.tooltip.clear();
+        };
+
+        document.getElementById('holiday').onmouseover = function (e) {
+            CC.tooltip.create('holiday');
+        };
+        document.getElementById('holiday').onmouseleave = function (e) {
+            CC.tooltip.clear();
         };
     }
 };

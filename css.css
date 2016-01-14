@@ -2,12 +2,45 @@ body {
 	text-align: center;
 	font-size: 1em;
 	letter-spacing: 1px;
+	font-family: 'Times New Roman', 'Times', serif;
+	padding: 50px 30px 100px;
+}
+
+#tooltip {
+	opacity: 100;
+	position: absolute;
+	display: block;
+	background: gray;
+	z-index: 20;
+}
+
+#date-input {
+}
+
+input {
+	font-family: 'Courier New', 'Courier', monospaced;
+	font-size: 1.1em;
+	text-align: center;
+	height: 36px;
+	width: 100px;
+	border: 1px solid #bbb;
+	/*box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.1);*/
+	background: white;
+}
+
+#mm, #dd {
+	width: 60px;
+}
+
+section {
+	cursor: default;
+	padding-top: 20px;
 }
 
 .chinese {
 	font-family: 'PMingLiU', 'MingLiU', 'LiSong Pro Light', 'Apple LiSung Light', serif;
 	font-size: 20em;
-	margin-bottom: -16px;
+	margin-bottom: -30px;
 	/*font-weight: 900;*/
 }
 
