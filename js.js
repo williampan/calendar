@@ -111,13 +111,13 @@ CC.makeChineseDate = function (date) {
         datePinyin = 'shí' + digitsPinyin[d % 10];
     } else if (d === 20) {
         dateString = '二十';
-        datePinyin = 'èrshí'
+        datePinyin = 'èrshí';
     } else if (d < 30) {
         dateString = '廿' + digits[d % 10];
         datePinyin = 'niàn' + digitsPinyin[d % 10];
     } else if (d === 30) {
         dateString = '三十';
-        datePinyin = 'sānshí'
+        datePinyin = 'sānshí';
     }
     dateString = dateString;
     datePinyin = datePinyin;
@@ -422,16 +422,16 @@ CC.dateInput = {
         var dd = document.getElementById('dd');
 
         yyyy.onclick = function (e) {
-            this.select();
-        }
+            yyyy.select();
+        };
 
         mm.onclick = function (e) {
-            this.select();
-        }
+            mm.select();
+        };
 
         dd.onclick = function (e) {
-            this.select();
-        }
+            dd.select();
+        };
 
         yyyy.onkeydown = function (e) {
             var key = e.keyCode || e.charCode;
@@ -493,9 +493,9 @@ CC.dateInput = {
                     && yyyy.value.length > 0
                     && dd.value.length > 0
                     && mm.value.length > 0) {
-                yValue = parseInt(yyyy.value);
-                mValue = parseInt(mm.value) - 1;
-                dValue = parseInt(dd.value);
+                var yValue = parseInt(yyyy.value);
+                var mValue = parseInt(mm.value) - 1;
+                var dValue = parseInt(dd.value);
                 var cd = CC.makeChineseDate(new Date(yValue, mValue, dValue));
                 CC.writeChineseDate(cd);
             }
@@ -503,8 +503,43 @@ CC.dateInput = {
     }
 };
 
+
+CC.tooltip = {
+    on: false,
+    create: function () {
+        var left = 3;
+        var top = 3;
+
+        if (!CC.tooltip.on) {
+            CC.tooltip.on = true;
+            var tt = document.createElement('div');
+            tt.setAttribute('id', 'tooltip');
+            var content = document.createElement('div');
+            tt.appendChild(content);
+            document.body.appendChild(tt);
+            document.onmousemove = function (e) {
+                var topEdge = e.pageY;
+                var leftEdge = e.pageX;
+                tt.style.top = (topEdge - h) + 'px';
+                tt.style.left = (leftEdge + left) + 'px';
+            };
+
+            content.innerHTML = 'TEST';
+            tt.style.width = '300px';
+            tt.style.height = '100px';
+            h = parseInt(tt.offsetHeight) + top;
+        }
+    },
+    init: function () {
+        document.getElementById('year').onmouseover = function (e) {
+            CC.tooltip.create();
+        };
+    }
+};
+
 CC.init = function () {
     CC.dateInput.init();
+    CC.tooltip.init();
 
     var cd = CC.makeChineseDate(new Date());
     CC.writeChineseDate(cd);
