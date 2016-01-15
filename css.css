@@ -7,12 +7,28 @@ body {
 }
 
 #tooltip {
-	opacity: 100;
-	position: absolute;
+	background: white;
+	border: 2px solid black;
 	display: block;
-	background: gray;
+	font-family: 'Times New Roman', Times, serif;
+	font-size: 1.2em;
+	letter-spacing: 0;
+	line-height: 1.3;
+	opacity: 0.95;
+	padding: 20px 24px;
+	position: absolute;
+	text-align: left;
+	width: 500px;
 	z-index: 20;
 }
+	#tooltip p {
+		padding: 0;
+		margin: 0;
+	}
+
+	#tooltip p + p {
+		padding-top: 1em;
+	}
 
 #date-input {
 }
