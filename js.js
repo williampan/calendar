@@ -70,7 +70,7 @@ CC.chineseDate = {
         ChineseDate.year = {
             string: stems[stemIndex] + branches[branchIndex],
             pinyin: stemsPinyin[stemIndex] + branchesPinyin[branchIndex],
-            english: 'The ' + y + getSuffix(y) + ' Year in the Sexagenary Cycle' + '<br>'
+            english: 'The ' + y + getSuffix(y) + ' Year in the Sexagenary Cycle' + ' '
                     + '(' + stemIndex + getSuffix(stemIndex) + ' ' + 'Celestial Stem,' + ' '
                     + branchIndex + getSuffix(branchIndex) + ' Earthly Branch)',
             elaboration: '<p>Years are measured in 60-year cycles.' + ' '
@@ -152,7 +152,7 @@ CC.chineseDate = {
             pinyin: datePinyin,
             english: d + getSuffix(d) + ' ' + 'Day',
             elaboration: 'There are 29 or 30 days in a month, ' + ' '
-                    + 'ddepending on the length of the lunar cycle.' + ' '
+                    + 'depending on the length of the lunar cycle.' + ' '
                     + 'Since each month begins with a new moon, the full moon always occurs' + ' '
                     + 'around the 15th day.'
         };
@@ -343,7 +343,7 @@ CC.chineseDate = {
                 var monthTomorrow = s.split('/')[0];
 
                 if (monthTomorrow === 1) {
-                    holidayAvailable = false;
+                    holidayAvailable = true;
                     holidayString = '除夕';
                     holidayPinyin = 'chúxì';
                     holidayEnglish = 'New Year’s Eve';
@@ -439,6 +439,8 @@ CC.chineseDate = {
         } else {
             document.getElementById('holiday').style.display = 'none';
         }
+
+        CC.tooltip.init();
     },
 
     init: function () {
@@ -545,9 +547,13 @@ CC.dateInput = {
 
 CC.tooltip = {
     tooltip: null,
-    create: function (text) {
+    topEdge: 0,
+    leftEdge: 0,
+    create: function (text, width) {
         var left = 3;
         var top = 3;
+        var topEdge;
+        var leftEdge;
 
         if (CC.tooltip.tooltip === null) {
             CC.tooltip.tooltip = document.createElement('div');
@@ -556,12 +562,18 @@ CC.tooltip = {
             var content = document.createElement('div');
             tt.appendChild(content);
             document.body.appendChild(tt);
+            tt.style.width = width + 'px';
+
             document.onmousemove = function (e) {
-                var topEdge = e.pageY;
-                var leftEdge = e.pageX;
-                tt.style.top = (topEdge - h) + 'px';
-                tt.style.left = (leftEdge + left) + 'px';
-            };
+                CC.tooltip.topEdge = e.clientY;
+                CC.tooltip.leftEdge = e.clientX;
+                tt.style.top = (CC.tooltip.topEdge + 10) + 'px';
+                tt.style.left = (CC.tooltip.leftEdge + left + 20) + 'px';
+            }
+            document.onscroll = function (e) {
+                tt.style.top = (CC.tooltip.topEdge + 10) + 'px';
+                tt.style.left = (CC.tooltip.leftEdge + left + 20) + 'px';
+            }
 
             content.innerHTML = text;
             h = parseInt(tt.offsetHeight) + top;
@@ -578,47 +590,81 @@ CC.tooltip = {
     init: function () {
         var cd = CC.chineseDate.date;
 
-        document.getElementById('year').onmouseover = function (e) {
-            CC.tooltip.create(cd.year.elaboration);
-        };
-        document.getElementById('year').onmouseleave = function (e) {
-            CC.tooltip.clear();
-        };
+        function display(id, object, width) {
+            document.getElementById(id).onmouseover = function (e) {
+                CC.tooltip.create(
+                    '<span class="tooltip-pinyin">' + object.pinyin + '</span>' + ' : '
+                    + '<span class="tooltip-english">' + object.english + '</span>',
+                    width
+                );
+            };
+            document.getElementById(id).onmouseleave = function (e) {
+                CC.tooltip.clear();
+            };
+        }
 
-        document.getElementById('zodiac').onmouseover = function (e) {
-            CC.tooltip.create(cd.zodiac.elaboration);
-        };
-        document.getElementById('zodiac').onmouseleave = function (e) {
-            CC.tooltip.clear();
-        };
+        display('year', cd.year, 500);
+        display('zodiac', cd.zodiac, 400);
+        display('month', cd.month, 225);
+        display('date', cd.date, 175);
+        if (cd.solarTerm.available) {
+            display('solar-term', cd.solarTerm, 200);
+        }
+        if (cd.holiday.available) {
+            display('holiday', cd.holiday, 200);
+        }
+    }
+};
 
-        document.getElementById('month').onmouseover = function (e) {
-            CC.tooltip.create(cd.month.elaboration);
-        };
-        document.getElementById('month').onmouseleave = function (e) {
-            CC.tooltip.clear();
-        };
+CC.overlay = {
+    overlay: null,
+    create: function (text, container) {
+        var left = 3;
+        var top = 3;
 
-        document.getElementById('date').onmouseover = function (e) {
-            CC.tooltip.create(cd.date.elaboration);
-        };
-        document.getElementById('date').onmouseleave = function (e) {
-            CC.tooltip.clear();
-        };
+        if (CC.overlay.overlay === null) {
+            CC.overlay.overlay = document.createElement('div');
+            ov = CC.overlay.overlay;
+            ov.setAttribute('id', 'overlay');
 
-        document.getElementById('solar-term').onmouseover = function (e) {
-            CC.tooltip.create(cd.solarTerm.elaboration);
-        };
-        document.getElementById('solar-term').onmouseleave = function (e) {
-            CC.tooltip.clear();
-        };
+            var containerStyle = window.getComputedStyle(container);
+            var left = parseInt(containerStyle.width) / 2 - 250;
+            ov.style.left = left + 'px';
 
-        document.getElementById('holiday').onmouseover = function (e) {
-            CC.tooltip.create(cd.holiday.elaboration);
-        };
-        document.getElementById('holiday').onmouseleave = function (e) {
-            CC.tooltip.clear();
-        };
+            var content = document.createElement('div');
+            ov.appendChild(content);
+            container.appendChild(ov);
+            content.innerHTML = text;
+        }
+    },
+
+    clear: function () {
+        if (document.body.contains(CC.overlay.overlay)) {
+            CC.overlay.overlay.parentNode.removeChild(CC.overlay.overlay);
+        }
+        CC.overlay.overlay = null;
+    },
+
+    init: function () {
+        var cd = CC.chineseDate.date;
+
+        function display(id, object) {
+            document.getElementById(id).onclick = function (e) {
+                CC.overlay.clear();
+                CC.overlay.create(object.elaboration, document.getElementById(id));
+            };
+        }
+
+        display('year', cd.year, 500);
+        display('zodiac', cd.zodiac, 400);
+        display('month', cd.month, 225);
+        display('date', cd.date, 175);
+        if (cd.solarTerm.available) {
+            display('solar-term', cd.solarTerm, 200);
+        }
+        if (cd.holiday.available) {
+            display('holiday', cd.holiday, 200);
+        }
     }
 };
 
@@ -626,6 +672,7 @@ CC.init = function () {
     CC.chineseDate.init();
     CC.dateInput.init();
     CC.tooltip.init();
+    CC.overlay.init();
 };
 
 CC.init();
