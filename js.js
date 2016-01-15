@@ -76,12 +76,12 @@ CC.chineseDate = {
             elaboration: '<p>Years are measured in 60-year cycles.' + ' '
                     + 'Each successive year introduces the next Celestial Stem in the cycle of ten' + ' '
                     + 'and the next Earthly Branch in the cycle of twelve.</p>' + ' '
-                    + '<p>The sexagenary cycle first appeared in the late 2nd millenium BCE' + ' '
+                    + '<p>The sexagenary cycle first appeared circa 1,300 BCE' + ' '
                     + 'on Shang dynasty oracle bones as a system for recording days,' + ' '
                     + 'and was adapted around the 3rd century BCE to record the years.' + ' '
-                    + 'The Celestial Stems were originally the names of the ten suns' + ' '
-                    + '(which appeared in order in a ten-day cycle) under Shang-dynasty belief,' + ' '
-                    + 'while the Earthly Branches originated from observations of the orbit of Jupiter, the Earth star.</p>'
+                    + 'Under Shang-dynasty belief there were ten suns, ' + ' '
+                    + 'which appeared in order in a ten-day cycle, and the Celestial Stems are the names of these suns.' + ' '
+                    + 'The Earthly Branches are based upon observations of the orbit of Jupiter, the Earth star.</p>'
 
         };
 
@@ -116,9 +116,7 @@ CC.chineseDate = {
             elaboration: 'Each month begins with a new moon, and there are 12 months in the year,' + ' '
                     + 'with a leap month inserted every 2 or 3 years.' + ' '
                     + 'Leap months are inserted according to calculations of lunar phases' + ' '
-                    + 'and named according to the following numbered month;' + ' '
-                    + 'for example, a leap month inserted between the 6th and 7th months' + ' '
-                    + 'would be called a leap 7th month.'
+                    + 'and can appear at any time in the year.'
         };
 
         // Date
@@ -618,10 +616,8 @@ CC.tooltip = {
 
 CC.overlay = {
     overlay: null,
+    container: null,
     create: function (text, container) {
-        var left = 3;
-        var top = 3;
-
         if (CC.overlay.overlay === null) {
             CC.overlay.overlay = document.createElement('div');
             ov = CC.overlay.overlay;
@@ -635,6 +631,7 @@ CC.overlay = {
             ov.appendChild(content);
             container.appendChild(ov);
             content.innerHTML = text;
+            CC.overlay.container = container;
         }
     },
 
@@ -643,6 +640,7 @@ CC.overlay = {
             CC.overlay.overlay.parentNode.removeChild(CC.overlay.overlay);
         }
         CC.overlay.overlay = null;
+        CC.overlay.container = null;
     },
 
     init: function () {
@@ -650,8 +648,12 @@ CC.overlay = {
 
         function display(id, object) {
             document.getElementById(id).onclick = function (e) {
-                CC.overlay.clear();
-                CC.overlay.create(object.elaboration, document.getElementById(id));
+                if (CC.overlay.container === document.getElementById(id)) {
+                    CC.overlay.clear();
+                } else {
+                    CC.overlay.clear();
+                    CC.overlay.create(object.elaboration, document.getElementById(id));
+                }
             };
         }
 
