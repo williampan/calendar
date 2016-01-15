@@ -36,13 +36,32 @@ body {
 	}
 
 #overlay {
-	background: white;
+	background: rgba(255, 255, 255, 1);
+	border: 1px solid black;
+	color: black;
+	display: block;
+	font-family: 'Times New Roman', Times, serif;
+	font-size: 1.2em;
+	letter-spacing: 0.5px;
+	line-height: 1.2;
+	opacity: 1;
+	padding: 20px 15px 20px 20px;
 	position: absolute;
-	margin: 0 auto;
-	top: 50px;
-	width: 500px;
-	z-index: 10;
+	text-align: left;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	width: 700px;
+	z-index: 20;
 }
+	#overlay p {
+		padding: 0;
+		margin: 0;
+	}
+
+	#overlay p + p {
+		padding-top: 1em;
+	}
 
 #date-input {
 }

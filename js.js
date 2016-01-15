@@ -628,8 +628,8 @@ CC.overlay = {
             ov.setAttribute('id', 'overlay');
 
             var containerStyle = window.getComputedStyle(container);
-            var left = parseInt(containerStyle.width) / 2 - 250;
-            ov.style.left = left + 'px';
+            // var left = parseInt(containerStyle.width) / 2 - 250;
+            // ov.style.left = left + 'px';
 
             var content = document.createElement('div');
             ov.appendChild(content);
